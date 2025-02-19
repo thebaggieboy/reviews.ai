@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -6,6 +8,27 @@ import { ArrowDown, ArrowUp, BarChart3, Clock, MessageSquare, Star, ThumbsUp, Tr
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Badge } from "@/components/ui/badge"
+import { useEffect, useState } from "react"
+
+import api from "@/lib/api"
+
+
+
+
+
+
+
+
+
+
+
+interface Review {
+  user: string;
+  action: string;
+  time: string;
+  message: string;
+  platform: string;
+}
 
 const reviewData = [
   { name: "Jan", reviews: 65 },
@@ -18,6 +41,22 @@ const reviewData = [
 ]
 
 export default function DashboardPage() {
+  const [reviews, setReviews] = useState<Review[]>([])
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data } = await api.get('/business/reviews/')
+        setReviews(data)
+        console.log("Reviews: ", reviews)
+      } catch (error) {
+        console.error('Failed to load reviews:', error)
+      }
+    }
+    loadData()
+  }, [])
+
+  
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">

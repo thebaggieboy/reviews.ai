@@ -1,9 +1,23 @@
+'use client' 
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { MessageSquare } from "lucide-react"
 
+
+const googleAuth = async() => {
+  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const redirectUri = "http://localhost:3000/api/auth/callback";
+  const scope = "openid email profile https://www.googleapis.com/auth/business.manage";
+  const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline&prompt=consent`;
+  console.log("Google Client ID:", clientId); 
+  window.location.href = authUrl;
+};
+
+
 export default function SignUpPage() {
+  
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
       <Card className="w-full max-w-md">
@@ -15,7 +29,7 @@ export default function SignUpPage() {
           <CardDescription className="text-center">Create an account to start managing your reviews</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button className="w-full" variant="outline">
+          <Button onClick={googleAuth} className="w-full" variant="outline">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="mr-2 h-5 w-5">
               <path
                 fill="#FFC107"
@@ -40,9 +54,9 @@ export default function SignUpPage() {
         <CardFooter className="flex flex-col space-y-2">
           <div className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/signin" className="text-primary hover:underline">
+            <button  className="text-primary hover:underline">
               Sign in
-            </Link>
+            </button>
           </div>
           <div className="text-sm text-muted-foreground">
             By signing up, you agree to our{" "}

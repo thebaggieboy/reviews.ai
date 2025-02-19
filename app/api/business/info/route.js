@@ -2,53 +2,59 @@ import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
+    console.log("[Business Info] Route started.");
+
     // Retrieve the access token from cookies
     const accessToken = req.cookies.get("access_token")?.value;
     if (!accessToken) {
+      console.error("[Business Info] Missing access token.");
       return NextResponse.json(
         { error: "Unauthorized: Missing access token" },
         { status: 401 }
       );
     }
 
-    // Define the URL for the Business Profile API to list accounts
+    // Google Business Profile API endpoint for listing accounts
     const apiUrl = "https://mybusinessbusinessinformation.googleapis.com/v1/accounts";
+    console.log("[Business Info] Fetching business accounts from:", apiUrl);
 
-    // Make the request using the stored access token
+    // Make the request to Google
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
 
-    // If the response is not OK, extract and throw an error
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Google API Error:", errorData);
-      throw new Error(errorData.error?.message || "Failed to fetch business profile information");
+      console.error("[Business Info] Google API error:", errorData);
+      throw new Error(
+        errorData.error?.message || "Failed to fetch business profile information"
+      );
     }
 
-    // Parse the JSON data from the response
     const data = await response.json();
+    console.log("[Business Info] Data received:", data);
 
-    // Ensure there is at least one account returned
     if (!data.accounts || data.accounts.length === 0) {
+      console.error("[Business Info] No business accounts found.");
       return NextResponse.json(
         { error: "No business profile found for this user." },
         { status: 404 }
       );
     }
 
-    // Optionally filter for accounts where the user is an OWNER
+    // Filter for accounts where the user is the OWNER.
     const ownerAccounts = data.accounts.filter((account) => account.role === "OWNER");
-    // If at least one owner account exists, choose it; otherwise, fall back to the first account.
     const selectedAccount = ownerAccounts.length > 0 ? ownerAccounts[0] : data.accounts[0];
 
+    console.log("[Business Info] Selected account:", selectedAccount);
     return NextResponse.json(selectedAccount);
+
   } catch (error) {
-    console.error("❌ Business Profile Info Error:", error.message);
+    console.error("[Business Info] Error:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

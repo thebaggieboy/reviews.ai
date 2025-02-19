@@ -13,7 +13,7 @@ import { useEffect, useState } from "react"
 import api from "@/lib/api"
 
 
-
+import { useRouter } from "next/navigation";
 
 
 
@@ -42,26 +42,84 @@ const reviewData = [
 
 export default function DashboardPage() {
   const [reviews, setReviews] = useState<Review[]>([])
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [businessInfo, setBusinessInfo] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+  const businessId = "your-business-id"; // Replace with the actual business ID
 
   useEffect(() => {
-    const loadData = async () => {
+    const fetchMetrics = async () => {
       try {
-        const { data } = await api.get('/business/reviews/')
-        setReviews(data)
-        console.log("Reviews: ", reviews)
+        const res = await fetch(`/api/business/metrics?businessId=${businessId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setMetrics(data);
+        } else {
+          console.error("Failed to fetch metrics");
+        }
       } catch (error) {
-        console.error('Failed to load reviews:', error)
+        console.error("Error fetching metrics:", error);
+      } finally {
+        setLoading(false);
       }
-    }
-    loadData()
-  }, [])
+    };
+
+    fetchMetrics();
+  }, [businessId]);
+  
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        // Fetch user info
+        const userRes = await fetch("/api/auth/me");
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          setUser(userData);
+        } else {
+          router.push("/login");
+          return;
+        }
+
+        // Fetch business info
+        const businessRes = await fetch("/api/business/info");
+        if (businessRes.ok) {
+          const businessData = await businessRes.json();
+          setBusinessInfo(businessData);
+
+          // Fetch reviews if business is found
+          if (businessData.accounts?.length > 0) {
+            const businessId = businessData.accounts[0].name.split("/")[1];
+            const reviewsRes = await fetch(`/api/business/reviews?businessId=${businessId}`);
+
+            if (reviewsRes.ok) {
+              const reviewsData = await reviewsRes.json();
+              setReviews(reviewsData);
+            }
+          }
+        }
+
+      } catch (error) {
+        console.error("❌ Dashboard Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, [router]);
+
+  if (loading) return <p>Loading...</p>;
+
+ 
 
   
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">Welcome back, John! 👋</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">Welcome back, {user?.name}! 👋</h2>
           <p className="text-sm text-muted-foreground">Here's what's happening with your reviews today.</p>
         </div>
         <div className="flex items-center gap-2">

@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       // 2️⃣ Ensure Required Environment Variables Exist
       if (
         !process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
-        !process.env.NEXT_PUBLIC_GOOGLE_SECRET ||
+        !process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET ||
         !process.env.NEXT_PUBLIC_REDIRECT_URI
       ) {
         console.error("❌ Missing environment variables");
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
       const tokenUrl = "https://oauth2.googleapis.com/token";
       const payload = {
         client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-        client_secret: process.env.NEXT_PUBLIC_GOOGLE_SECRET,
+        client_secret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET,
         code,
         grant_type: "authorization_code",
         redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI,
@@ -62,6 +62,7 @@ export default async function handler(req, res) {
       console.log("🚀 Redirecting to /dashboard...");
 
       return res.redirect(302, "/dashboard");
+
   
     } catch (error) {
       console.error("❌ Unexpected Error:", error);

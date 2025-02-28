@@ -7,9 +7,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
+      <header className="sticky top-0 z-50 w-full p-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container flex h-14  items-center">
+          <Link href="/" className="flex items-center gap-2  font-semibold">
             <MessageSquare className="h-6 w-6 text-emerald-500" />
             <span>review.ai</span>
           </Link>
@@ -34,7 +34,7 @@ export default function LandingPage() {
               </Button>
             </Link>
             <Link href="/signup">
-              <Button size="sm">Get Started</Button>
+              <Button className="bg-green-600" size="sm">Get Started</Button>
             </Link>
           </div>
           <div className="ml-auto md:hidden">
@@ -72,12 +72,12 @@ export default function LandingPage() {
           </div>
         </div>
       </header>
-      <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+      <main className="flex-1 ">
+        <section className="w-full py-12 md:py-24 lg:py-48  bg-green-200">
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-4 text-center">
+            <div className="flex flex-col items-center space-y-2 text-center">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-5xl/none">
                   AI-Powered Review Responses for Small Businesses
                 </h1>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
@@ -86,7 +86,7 @@ export default function LandingPage() {
               </div>
               <div className="space-x-4">
                 <Link href="/signup">
-                  <Button size="lg">Start Free Trial</Button>
+                  <Button size="lg" className="bg-green-600 text-white">Start Free Trial</Button>
                 </Link>
                 <Link href="#demo">
                   <Button variant="outline" size="lg">
@@ -98,12 +98,12 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="problem" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <section id="problem" className="w-full py-12 md:py-24 lg:py-32 bg-green-600">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">The Core Problem</h2>
-                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-5xl">The Core Problem</h2>
+                <p className="mx-auto max-w-[700px] text-white md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Small businesses waste 5-10 hours/month manually responding to online reviews, risking reputation
                   damage with slow/poor responses.
                 </p>
@@ -150,7 +150,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="solution" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="solution" className="w-full py-12 md:py-24 lg:py-32 ">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -353,11 +353,11 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-black">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Ready to Get Started?</h2>
+                <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-5xl">Ready to Get Started?</h2>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Join thousands of businesses already saving time and improving customer satisfaction with review.ai.
                 </p>

@@ -26,10 +26,12 @@ export default function SignUpPage() {
             <MessageSquare className="h-6 w-6 text-emerald-500" />
             <CardTitle className="text-2xl font-bold">review.ai</CardTitle>
           </div>
-          <CardDescription className="text-center">Create an account to start managing your reviews</CardDescription>
+          <CardDescription className="text-center">
+            Create an account to start managing your reviews across Google, Yelp, and Trustpilot
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button onClick={googleAuth} className="w-full" variant="outline">
+          <Button className="w-full" onClick={googleAuth} variant="outline">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="mr-2 h-5 w-5">
               <path
                 fill="#FFC107"
@@ -50,13 +52,26 @@ export default function SignUpPage() {
             </svg>
             Sign up with Google
           </Button>
+     
+          <Button className="w-full" variant="outline">
+            <svg viewBox="0 0 24 24" className="mr-2 h-5 w-5" fill="#FF1A1A">
+              <path d="M20.16 12.5c-.36-.3-3.45-2.36-3.45-6.75 0-3.53 2.15-5.4 2.26-5.47a.49.49 0 0 0 .17-.51.5.5 0 0 0-.41-.36c-.06-.01-1.44-.15-2.85-.15-1.82 0-3.31.45-4.43 1.34-.45.35-.81.75-1.09 1.18-.28-.43-.64-.83-1.09-1.18C8.2.21 6.71-.24 4.89-.24c-1.41 0-2.79.14-2.85.15a.5.5 0 0 0-.41.36.49.49 0 0 0 .17.51c.11.07 2.26 1.94 2.26 5.47 0 4.39-3.09 6.45-3.45 6.75a.5.5 0 0 0-.17.54.5.5 0 0 0 .44.3h4.97c.04.36.27 3.45 3.64 3.94V12.2a.47.47 0 0 0-.09-.29L6.18 7.02a.5.5 0 0 1 .15-.72.5.5 0 0 1 .68.15l2.41 3.56V3.75c0-.28.22-.5.5-.5s.5.22.5.5v6.26l2.41-3.56a.5.5 0 0 1 .68-.15c.23.14.3.44.15.72l-3.12 4.89a.47.47 0 0 0-.09.29v5.58c3.37-.49 3.6-3.58 3.64-3.94h4.97a.5.5 0 0 0 .44-.3.5.5 0 0 0-.17-.54z" />
+            </svg>
+            Sign up with Yelp
+          </Button>
+          <Button className="w-full" variant="outline">
+            <svg viewBox="0 0 24 24" className="mr-2 h-5 w-5" fill="#00B67A">
+              <path d="M22.35 8.11l-5.72-.83L14.17 2a1.29 1.29 0 0 0-2.34 0L9.37 7.28l-5.72.83a1.29 1.29 0 0 0-.72 2.21l4.14 4.04-.98 5.7a1.29 1.29 0 0 0 1.88 1.36L12 18.86l5.03 2.56a1.29 1.29 0 0 0 1.88-1.36l-.98-5.7 4.14-4.04a1.29 1.29 0 0 0-.72-2.21z" />
+            </svg>
+            Sign up with Trustpilot
+          </Button>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
           <div className="text-sm text-muted-foreground">
             Already have an account?{" "}
-            <button  className="text-primary hover:underline">
+            <Link href="/signin" className="text-primary hover:underline">
               Sign in
-            </button>
+            </Link>
           </div>
           <div className="text-sm text-muted-foreground">
             By signing up, you agree to our{" "}

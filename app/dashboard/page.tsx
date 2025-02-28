@@ -74,11 +74,12 @@ export default function DashboardPage() {
       try {
         // Fetch user info
         const userRes = await fetch("/api/auth/me");
+        //const userRes = await fetch("localhost:5000/");
         if (userRes.ok) {
           const userData = await userRes.json();
           setUser(userData);
         } else {
-          router.push("/login");
+          // router.push("/login");
           return;
         }
 
@@ -138,39 +139,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Rating</CardTitle>
-            <Star className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline space-x-3">
-              <div className="text-2xl font-bold">4.8</div>
-              <div className="flex items-center text-sm text-emerald-500">
-                <ArrowUp className="h-4 w-4" />
-                12%
-              </div>
-            </div>
-            <div className="mt-4 flex gap-2">
-              {[5, 4, 3, 2, 1].map((rating) => (
-                <div key={rating} className="flex flex-1 flex-col items-center gap-1">
-                  <div className="h-16 w-full rounded-sm bg-muted">
-                    <div
-                      className="h-full rounded-sm bg-primary"
-                      style={{
-                        height: `${
-                          rating === 5 ? "80%" : rating === 4 ? "15%" : rating === 3 ? "3%" : rating === 2 ? "1%" : "1%"
-                        }`,
-                      }}
-                    />
-                  </div>
-                  <span className="text-xs">{rating}★</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
+       
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Response Rate</CardTitle>

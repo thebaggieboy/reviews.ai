@@ -1,3 +1,4 @@
+"use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -6,7 +7,66 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { Plus, Settings } from "lucide-react"
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { useState } from "react"
+
+const initialTemplates = [
+  { id: 1, name: "John's Coffee Shop", location: "New York, NY", rating: 4.5, reviewCount: 120 },
+
+]
+
 export default function AutoResponsesPage() {
+
+    const [businesses, setBusinesses] = useState(initialTemplates)
+    const [newBusiness, setNewBusiness] = useState({ name: "", location: "" })
+    const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
+    const [selectedBusiness, setSelectedBusiness] = useState(null)
+  
+    const handleAddBusiness = () => {
+      if (newBusiness.name && newBusiness.location) {
+        setBusinesses([
+          ...businesses,
+          {
+            id: businesses.length + 1,
+            ...newBusiness,
+            rating: 0,
+            reviewCount: 0,
+          },
+        ])
+        setNewBusiness({ name: "", location: "" })
+        setIsAddDialogOpen(false)
+      }
+    }
+  
+    const handleEditBusiness = () => {
+      if (selectedBusiness) {
+        const updatedBusinesses = businesses.map((business) =>
+          business.id === selectedBusiness.id ? selectedBusiness : business,
+        )
+        setBusinesses(updatedBusinesses)
+        setIsEditDialogOpen(false)
+      }
+    }
+  
+    const openEditDialog = (business) => {
+      setSelectedBusiness(business)
+      setIsEditDialogOpen(true)
+    }
+  
+    const openViewDialog = (business) => {
+      setSelectedBusiness(business)
+      setIsViewDialogOpen(true)
+    }
   return (
     <div className="space-y-6">
       <div>
@@ -19,13 +79,60 @@ export default function AutoResponsesPage() {
           <TabsTrigger value="templates">Response Templates</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
+
         <TabsContent value="templates" className="space-y-4">
-          <div className="flex justify-between">
-            <Input className="max-w-sm" placeholder="Search templates..." />
+           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
             <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add New Template
+              <Plus className="mr-2 h-4 w-4" /> Add Business
             </Button>
-          </div>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New Template</DialogTitle>
+              <DialogDescription>Enter the details of your new template below.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Template Name
+                </Label>
+                <Input
+                  id="name"
+                  value={newBusiness.name}
+                  onChange={(e) => setNewBusiness({ ...newBusiness, name: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="location" className="text-right">
+                  Location
+                </Label>
+                <Input
+                  id="location"
+                  value={newBusiness.location}
+                  onChange={(e) => setNewBusiness({ ...newBusiness, location: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="location" className="text-right">
+                  Description
+                </Label>
+                <textarea
+                  id="description"
+                  value={newBusiness.location}
+                  onChange={(e) => setNewBusiness({ ...newBusiness, location: e.target.value })}
+                  className="col-span-3 border-1 border-gray-100"
+                ></textarea>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button onClick={handleAddBusiness}>Add Template</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[
               { name: "Positive Review Response", type: "Positive" },
@@ -50,9 +157,61 @@ export default function AutoResponsesPage() {
                     This is a sample response for a {template.type.toLowerCase()} review. Click edit to customize the
                     content.
                   </p>
-                  <Button className="mt-4" variant="outline">
+                  <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} className="p-2">
+          <DialogTrigger asChild>
+          <div className="">
+          <Button className="bg-green-600 text-white mt-2 mb-2 text-xs float-right">
+              Edit Template
+            </Button><br />
+          </div> 
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Template</DialogTitle>
+              <DialogDescription>Enter the details of your new business below.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Template Name
+                </Label>
+                <Input
+                  id="name"
+                  value={newBusiness.name}
+                  onChange={(e) => setNewBusiness({ ...newBusiness, name: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="location" className="text-right">
+                  Location
+                </Label>
+                <Input
+                  id="location"
+                  value={newBusiness.location}
+                  onChange={(e) => setNewBusiness({ ...newBusiness, location: e.target.value })}
+                  className="col-span-3"
+                />
+              </div>
+
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="location" className="text-right">
+                  Description
+                </Label>
+                <textarea
+                  id="description"
+                  value={newBusiness.location}
+                  onChange={(e) => setNewBusiness({ ...newBusiness, location: e.target.value })}
+                  className="col-span-3 border-1 border-gray-100"
+                ></textarea>
+              </div>
+            </div>
+            <Button className="mt-4 bg-white text-black border-bold" onClick={handleEditBusiness} variant="outline">
                     Edit Template
                   </Button>
+          </DialogContent>
+        </Dialog>
+                 
                 </CardContent>
               </Card>
             ))}

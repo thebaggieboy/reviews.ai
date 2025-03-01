@@ -143,7 +143,7 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button className="w-full" type="submit">
+            <Button className="w-full bg-black" type="submit">
               Sign In
             </Button>
             <div className="mt-4 text-center text-sm">

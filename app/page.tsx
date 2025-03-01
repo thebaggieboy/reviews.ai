@@ -7,7 +7,7 @@ import styles from "../styles/main.module.css"
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col" style={{fontFamily:'Arial', lineHeight:1}}>
+    <div className="flex min-h-screen flex-col" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}}>
       <header className="sticky top-0 z-50 w-full p-2 border-b bg-background/95 backdrop-blur  bg-black">
         <div className="container flex h-14  items-center">
           <Link href="/" className="flex text-white bolder items-center gap-2 ">
@@ -15,16 +15,16 @@ export default function LandingPage() {
             <span>review.ai</span> 
           </Link>
           <nav className="ml-auto hidden md:flex gap-4">
-            <Link href="#problem" style={{fontFamily:'Poppins', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
+            <Link href="#problem" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
               Problem
             </Link>
-            <Link href="#solution" style={{fontFamily:'Poppins', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
+            <Link href="#solution" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
               Solution
             </Link>
-            <Link href="#features" style={{fontFamily:'Poppins', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
+            <Link href="#features" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
               Features
             </Link>
-            <Link href="#pricing" style={{fontFamily:'Poppins', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
+            <Link href="#pricing" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
               Pricing
             </Link>
           </nav>

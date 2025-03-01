@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -10,73 +10,47 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Flag, Star, ThumbsUp, Clock, AlertCircle, Filter, Paperclip } from "lucide-react"
- 
+
 import GenerateResponse from "../../../components/GenerateResponse"
 import getResponseData from "../../../lib/getResponseData"
 
+import useData from "../../../hooks/useData"
 export default function EmailManagementPage() {
+  const [emailContent, setEmailContent] = useState("I have an issue with my payment order. Can you help me with this?");
+  const [generatedMessage, setGeneratedMessage] = useState("");
+
   const [selectedEmail, setSelectedEmail] = useState(null)
   const [response, setResponse] = useState("")
   const [isResponse, setIsResponse] = useState(false)
 
 
-  const emails = [
-    {
-      id: 1,
-      from: "Alice Johnson",
-      subject: "Order #1234 Inquiry",
-      preview: "I have a question about my recent order...",
-      status: "New",
-      priority: "High",
-      receivedAt: "2023-06-10T14:30:00Z",
-    },
-    {
-      id: 2,
-      from: "Bob Smith",
-      subject: "Urgent Support Request",
-      preview: "We need assistance with our account...",
-      status: "Urgent",
-      priority: "High",
-      receivedAt: "2023-06-10T15:45:00Z",
-    },
-    {
-      id: 3,
-      from: "Charlie Brown",
-      subject: "Newsletter Subscription",
-      preview: "I would like to subscribe to your newsletter...",
-      status: "Pending",
-      priority: "Low",
-      receivedAt: "2023-06-10T16:20:00Z",
-    },
-  ]
+
+  const [emails, setEmails] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleEmailSelect = (email) => {
     setSelectedEmail(email)
   }
 
-  // const [formData, setFormData] = useState({
-	// 	user_response: "",
-		
-	// })
 
-	// const {user_response} =  formData 
-  // console.log(user_response)
+  const handleGenerateMessage = async () => {
+    try {
+      const response = await fetch("/api/generate-message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ emailContent }),
+      });
 
-	// const inputChangeHandler = (e) => {
-	// 	const { name, value } = e.target
-	// 	setFormData((prevValue) => {
-	// 		return {
-	// 			...prevValue,
-	// 			[name]: value
-	// 		}
-	// 	})
+      const data = await response.json();
+      setGeneratedMessage(data.message);
+    } catch (error) {
+      console.error("Error generating message:", error);
+    }
+  };
 
-	// }
-
-  const generateResponseSubmit = async(e)=>{
-    e.preventDefault()
-    console.log("Generating response: ")
-  }
 
   const generateResponseForm = (e) => {
     e.preventDefault()
@@ -85,6 +59,26 @@ export default function EmailManagementPage() {
     getResponseData("http:localhost:5000/api/response/generate")
     
   }
+
+  useEffect(() => {
+    const fetchEmails = async () => {
+     // Fetch emails with GET method
+      const response = await fetch("/api/email/list", {
+        method: "GET", // <-- Explicitly specify GET
+        credentials: "include", // Include cookies
+      });
+      const data = await response.json();
+   
+      setEmails(data);
+      setLoading(false);
+
+    };
+
+    fetchEmails();
+  }, []);
+// pages/api/gmail/emails.js
+ 
+console.log("Emails: ", emails);
 
   return (
     <div className="flex h-[calc(100vh-4rem)] bg-gray-50">
@@ -105,7 +99,7 @@ export default function EmailManagementPage() {
           </Tabs>
         </div> <br/>
         <div className="overflow-y-auto  flex-grow">
-          {emails.map((email) => (
+          {emails?.map((email) => (
             <Card
               key={email.id}
               className={`mb-2 mx-2 cursor-pointer transition-all hover:shadow-md ${selectedEmail?.id === email.id ? "ring-2 ring-primary" : ""}`}
@@ -200,36 +194,27 @@ export default function EmailManagementPage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="all" className="space-y-4">
-          {[
-            {
-              author: "Sarah Johnson",
-              rating: 5,
-              time: "2 minutes ago",
-              status: "pending",
-              content:
-                "Amazing coffee and even better service! The staff was incredibly friendly and the atmosphere was perfect for getting some work done. Will definitely be coming back!",
-            },
-   
-          ].map((review, i) => (
-            <Card key={i}>
+        
+            <Card>
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex gap-4">
-                    <Avatar>
+                 {/* {   <Avatar>
                       <AvatarImage src={`/placeholder-user-${i + 1}.jpg`} />
-                      <AvatarFallback>
+                  {    <AvatarFallback>
                         {review.author
                           .split(" ")
                           .map((n) => n[0])
                           .join("")}
-                      </AvatarFallback>
-                    </Avatar>
+                      </AvatarFallback>}
+                    </Avatar>} */}
                     <div>
+
                       <CardTitle className="text-base">{selectedEmail.from}</CardTitle>
                       <CardDescription>
                         <div className="flex items-center gap-2">
                           <span>{selectedEmail.subject}</span>
-                          {review.status === "pending" ? (
+                       {/* {   {review.status === "pending" ? (
                             <Badge variant="destructive">
                               <Clock className="mr-1 h-3 w-3" />
                               Needs Response
@@ -239,45 +224,36 @@ export default function EmailManagementPage() {
                               <ThumbsUp className="mr-1 h-3 w-3" />
                               Responded
                             </Badge>
-                          )}
+                          )}} */}
                         </div>
                       </CardDescription>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-4 w-4 ${
-                          i < review.rating ? "fill-primary text-primary" : "fill-muted text-muted-foreground"
-                        }`}
-                      />
-                    ))}
-                  </div>
+                 
                 </div>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div className="grid gap-4">
-                  <div className="rounded-lg bg-muted p-4">
-                    <p className="text-sm">{review.content}</p> <br />
+                  <div className="rounded-lg p-4">
+                    {/* <p className="text-sm">{review.content}</p> <br /> */}
                     {isResponse == true ? <GenerateResponse/> : ""}
 
                   </div>
-                  {review.response && (
+                  {selectedEmail?.snippet && (
                     <div className="rounded-lg bg-primary/5 p-4">
                       <div className="mb-2 flex items-center gap-2">
                         <Avatar className="h-6 w-6">
-                          <AvatarImage src="/logo.png" />
-                          <AvatarFallback>AI</AvatarFallback>
+                          <AvatarImage src={selectedEmail?.picture} />
+                        
                         </Avatar>
                         <span className="text-xs font-medium">Auto Response • 5 minutes ago</span>
                       </div>
-                      <p className="text-sm">{review.response}</p>
+                      <p className="text-sm">{selectedEmail?.snippet}</p>
                     </div>
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  {/* {review.status === "pending" ? (
+                  {/* {response === "" ? (
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <AlertCircle className="h-4 w-4" />
                       <span>Response needed within 24 hours</span> 
@@ -290,13 +266,13 @@ export default function EmailManagementPage() {
                     </div>
                   )} */}
                   <div className="flex gap-2">
-                    {review.status === "pending" ? (
+                    {response === "" ? (
                       <>
                       
-                        <Button  variant="outline" size="sm">
+                        <Button onClick={generateResponseForm}   variant="outline" size="sm">
                           Generate Response
                         </Button>
-                        <Button onClick={generateResponseForm} size="sm"> {isResponse == true ? "Send" : "Respond Manually"} </Button>
+                        <Button onClick={handleGenerateMessage} size="sm"> {isResponse == true ? "Send" : "Respond Manually"} </Button>
                       </>
                     ) : (
                       <>
@@ -310,7 +286,7 @@ export default function EmailManagementPage() {
                 </div>
               </CardContent>
             </Card>
-          ))}
+       
         </TabsContent>
       </Tabs>
     </div>

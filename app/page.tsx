@@ -3,33 +3,34 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MessageSquare, Star, Zap, Clock, ThumbsUp, BarChart3, Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import styles from "../styles/main.module.css"
 
 export default function LandingPage() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full p-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="flex min-h-screen flex-col" style={{fontFamily:'Arial', lineHeight:1}}>
+      <header className="sticky top-0 z-50 w-full p-2 border-b bg-background/95 backdrop-blur  bg-black">
         <div className="container flex h-14  items-center">
-          <Link href="/" className="flex items-center gap-2  font-semibold">
+          <Link href="/" className="flex text-white bolder items-center gap-2 ">
             <MessageSquare className="h-6 w-6 text-emerald-500" />
-            <span>review.ai</span>
+            <span>review.ai</span> 
           </Link>
           <nav className="ml-auto hidden md:flex gap-4">
-            <Link href="#problem" className="text-sm font-medium hover:underline">
+            <Link href="#problem" style={{fontFamily:'Poppins', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
               Problem
             </Link>
-            <Link href="#solution" className="text-sm font-medium hover:underline">
+            <Link href="#solution" style={{fontFamily:'Poppins', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
               Solution
             </Link>
-            <Link href="#features" className="text-sm font-medium hover:underline">
+            <Link href="#features" style={{fontFamily:'Poppins', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
               Features
             </Link>
-            <Link href="#pricing" className="text-sm font-medium hover:underline">
+            <Link href="#pricing" style={{fontFamily:'Poppins', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
               Pricing
             </Link>
           </nav>
           <div className="ml-4 hidden md:flex gap-2">
             <Link href="/signin">
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" className='bg-white text-green-800' size="sm">
                 Sign In
               </Button>
             </Link>

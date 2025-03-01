@@ -9,6 +9,11 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+
+import {selectUser, setUser} from "../../features/user/userSlice"
+import { useDispatch, useSelector } from "react-redux"
+
+
 const googleAuth = async() => {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const redirectUri = "http://localhost:3000/api/auth/callback";
@@ -21,11 +26,12 @@ const googleAuth = async() => {
 export default function RegisterPage() {
 
   const router = useRouter()
+  const dispatch = useDispatch()
+
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you would typically make an API call to register the user
-    console.log("Registering:", { company, email, password })
+
     // For demo purposes, we'll just redirect to the dashboard
     router.push("/dashboard")
   }
@@ -33,12 +39,12 @@ export default function RegisterPage() {
 	const [spinner, setSpinner] = useState(false)	
 	
 	const [formData, setFormData] = useState({
-		company: "",
+		companyName: "",
 		email: "",
 		password: ""
 	})
 
-	const { company, email, password } = formData
+	const { companyName, email, password } = formData
   console.log("Form Data: ", formData)
 
 	const inputChangeHandler = (e) => {
@@ -53,7 +59,9 @@ export default function RegisterPage() {
 	}
 	function signUpSuccess() {
 		// Set cookies
-		router.push("/accounts/login?user=success")
+    dispatch(setUser({companyName, email, password}))
+    console.log("User[STATE]: ", {companyName, email, password})
+		router.push("/dashboard")
 	}
 	const submit = async (e) => {
 		
@@ -70,17 +78,19 @@ export default function RegisterPage() {
 
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ company, email, password}),
+                body: JSON.stringify({ companyName:companyName, email, password}),
                 credentials: "include"
 
             })
             const data = await res.json()
 
-            if (res.status >= 200 & res.status <= 209) {
+            if (res.status >= 200 && res.status <= 209) {
             console.log("New User Registered.")
             console.log(data)
             setSpinner(false)
+            //handleRegister()
             signUpSuccess()
+            
            
                 
             }
@@ -91,7 +101,7 @@ export default function RegisterPage() {
 			
 		
 		} catch (error) {
-			setFormErr(error)
+			
 			console.log("SIGNUP ERROR: ", error)
 		}
 	};
@@ -103,13 +113,13 @@ export default function RegisterPage() {
           <CardTitle className="text-2xl text-center">Create an account</CardTitle>
           <CardDescription className="text-center">Enter your details to create your account</CardDescription>
         </CardHeader>
-        <form onSubmit={handleRegister}>
+        <form >
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="company">Company Name</Label>
               <Input
-                id="company"
-                name="company"
+                id="companyName"
+                name="companyName"
                 type="text"
                 placeholder="Acme Inc."
               

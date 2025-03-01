@@ -8,14 +8,14 @@ import { ArrowDown, ArrowUp, BarChart3, Clock, MessageSquare, Star, ThumbsUp, Tr
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { Badge } from "@/components/ui/badge"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 
 import api from "@/lib/api"
 
 
-import { useRouter } from "next/navigation";
-
-
+import { useRouter, useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/features/user/userSlice";
 
 
 
@@ -43,84 +43,31 @@ const reviewData = [
 export default function DashboardPage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const user = useSelector(selectUser);
+  const [metrics, setMetrics] = useState(null);
+  const searchParams = useSearchParams();
   const [businessInfo, setBusinessInfo] = useState(null);
 
-  const [loading, setLoading] = useState(true);
-  const businessId = "your-business-id"; // Replace with the actual business ID
+ useEffect(()=>{
+    async function fetchUser(){
+     fetch('/api/auth/me')
+     .then((res) => res.json())
+     .then((data) => { 
+        setLoggedInUser(data);
+      })
+    
 
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      try {
-        const res = await fetch(`/api/business/metrics?businessId=${businessId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setMetrics(data);
-        } else {
-          console.error("Failed to fetch metrics");
-        }
-      } catch (error) {
-        console.error("Error fetching metrics:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchMetrics();
-  }, [businessId]);
-  
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        // Fetch user info
-        const userRes = await fetch("/api/auth/me");
-        //const userRes = await fetch("localhost:5000/");
-        if (userRes.ok) {
-          const userData = await userRes.json();
-          setUser(userData);
-        } else {
-          // router.push("/login");
-          return;
-        }
-
-        // Fetch business info
-        const businessRes = await fetch("/api/business/info");
-        if (businessRes.ok) {
-          const businessData = await businessRes.json();
-          setBusinessInfo(businessData);
-
-          // Fetch reviews if business is found
-          if (businessData.accounts?.length > 0) {
-            const businessId = businessData.accounts[0].name.split("/")[1];
-            const reviewsRes = await fetch(`/api/business/reviews?businessId=${businessId}`);
-
-            if (reviewsRes.ok) {
-              const reviewsData = await reviewsRes.json();
-              setReviews(reviewsData);
-            }
-          }
-        }
-
-      } catch (error) {
-        console.error("❌ Dashboard Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, [router]);
-
-  if (loading) return <p>Loading...</p>;
-
- 
-
-  
+    }
+    fetchUser()
+ }, [user])
+ console.log('user session', loggedInUser);
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">Welcome back, {user?.name}! 👋</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">Welcome back, {loggedInUser?.name}! 👋</h2>
           <p className="text-sm text-muted-foreground">Here's what's happening with your reviews today.</p>
         </div>
         <div className="flex items-center gap-2">

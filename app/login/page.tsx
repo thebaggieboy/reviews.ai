@@ -19,6 +19,11 @@ const googleAuth = async() => {
   window.location.href = authUrl;
 };
 
+function connect(){
+  console.log("Connecting to Google")
+  
+}
+
 export default function LoginPage() {
  
   const router = useRouter()

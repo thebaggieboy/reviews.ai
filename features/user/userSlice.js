@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const USER_TYPES = {
-    brand: "brand",
-    user: "user"
+    custom: "custom",
+    auth: "auth"
 }
 
 const userSlice = createSlice({

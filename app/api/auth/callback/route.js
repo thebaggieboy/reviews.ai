@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { selectToken, setToken } from "@/features/token/tokenSlice";
+import { useSelector } from "react-redux";
 
 export async function GET(req) {
   console.log("✅ API Route Hit: /api/auth/callback");
@@ -27,7 +29,11 @@ export async function GET(req) {
       }),
     });
 
+    // Save token data to user's account
+    // const user = await User.findById(tokenData.userId);
+    // user.googleTokens = tokens;
     const tokenData = await tokenResponse.json();
+
 
     if (!tokenResponse.ok) {
       throw new Error(tokenData.error_description || "Failed to exchange tokens");
@@ -47,6 +53,8 @@ export async function GET(req) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax"
     });
+    
+    
 
     return response;
 

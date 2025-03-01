@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import logger from 'redux-logger'
 import userSlice from "./user/userSlice"
-import businessSlice from "./brands/businessSlice"
+import businessSlice from "./business/businessSlice"
 import tokenSlice from "./token/tokenSlice"
 
 import {

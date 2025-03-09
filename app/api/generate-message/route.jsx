@@ -3,6 +3,8 @@ import { OpenAI } from "openai";
 
 // Initialize the OpenAI client
 const openai = new OpenAI({
+
+  baseURL: 'https://api.deepseek.com',
   apiKey: process.env.OPENAI_API_KEY, // Store your API key in .env.local
 });
 
@@ -23,7 +25,7 @@ export async function POST(request) {
 
     // Generate a response using OpenAI
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // or "gpt-4"
+      model: "deepseek-chat", // or "gpt-4"
       messages: [
         {
           role: "system",

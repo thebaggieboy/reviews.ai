@@ -48,6 +48,7 @@ export default function DashboardPage() {
   const [metrics, setMetrics] = useState(null);
   const searchParams = useSearchParams();
   const [businessInfo, setBusinessInfo] = useState(null);
+  const [thread, setThread] = useState(null);
 
  useEffect(()=>{
     async function fetchUser(){
@@ -61,6 +62,19 @@ export default function DashboardPage() {
 
     }
     fetchUser()
+
+
+    async function fetchThread(){
+      fetch('/api/email/replies')
+      .then((res) => res.json())
+      .then((data) => { 
+         setThread(data);
+       })
+     
+ 
+ 
+     }
+     fetchThread()
  }, [user])
  console.log('user session', loggedInUser);
   return (

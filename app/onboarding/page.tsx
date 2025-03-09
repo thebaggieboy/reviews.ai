@@ -7,13 +7,17 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Search, Plus } from "lucide-react"
+import { Search, Plus, MessageSquare, Menu } from "lucide-react"
+import Link from "next/link"
+import { SheetContent, Sheet, SheetTrigger } from "@/components/ui/sheet"
+ 
+import {selectUser, setUser} from "../../features/user/userSlice"
+import { useDispatch, useSelector } from "react-redux"
 
 // Mock data for existing businesses
 const existingBusinesses = [
-  { id: 1, name: "John's Coffee Shop", location: "New York, NY" },
-  { id: 2, name: "Sarah's Bakery", location: "Los Angeles, CA" },
-  { id: 3, name: "Mike's Diner", location: "Chicago, IL" },
+  { id: 1, name: "Connect your gmail account", location: "Sync your email to start automating replies" },
+
 ]
 
 export default function OnboardingPage() {
@@ -22,6 +26,10 @@ export default function OnboardingPage() {
   const [newBusiness, setNewBusiness] = useState({ name: "", location: "" })
   const [isAddingNew, setIsAddingNew] = useState(false)
   const router = useRouter()
+  const dispatch = useDispatch()
+  const user = useSelector(selectUser)
+
+
 
   const filteredBusinesses = existingBusinesses.filter(
     (business) =>
@@ -39,6 +47,73 @@ export default function OnboardingPage() {
   }
 
   return (
+   <>
+          <header className="sticky top-0 z-50 w-full p-2 border-b bg-background/95 backdrop-blur  bg-black">
+        <div className="container flex h-14  items-center">
+          <Link href="/" className="flex text-white bolder items-center gap-2 ">
+            <MessageSquare className="h-6 w-6 text-emerald-500" />
+            <span>review.ai</span> 
+          </Link>
+          <nav className="ml-auto hidden md:flex gap-4">
+            <Link href="#problem" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
+              Problem
+            </Link>
+            <Link href="#solution" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
+              Solution
+            </Link>
+            <Link href="#features" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
+              Features
+            </Link>
+            <Link href="#pricing" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}} className="text-sm bolder  text-white font-medium hover:underline">
+              Pricing
+            </Link>
+          </nav>
+          <div className="ml-4 hidden md:flex gap-2">
+            <Link href="/signin">
+              <Button variant="ghost" className='bg-white text-green-800' size="sm">
+                {user !== null ? "Dashboard" : "Sign In"}
+              </Button>
+            </Link>
+            <Link href="/signup">
+            {user !== null ? "" :  <Button className="bg-green-600" size="sm">Get Started</Button>}
+             
+            </Link>
+          </div>
+          <div className="ml-auto md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                <nav className="flex flex-col gap-4">
+                  <Link href="#problem" className="text-sm font-medium hover:underline">
+                    Problem
+                  </Link>
+                  <Link href="#solution" className="text-sm font-medium hover:underline">
+                    Solution
+                  </Link>
+                  <Link href="#features" className="text-sm font-medium hover:underline">
+                    Features
+                  </Link>
+                  <Link href="#pricing" className="text-sm font-medium hover:underline">
+                    Pricing
+                  </Link>
+                  <Link href="/signin">
+                    <Button variant="ghost" className="w-full justify-start">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button className="w-full">Get Started</Button>
+                  </Link>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
+      </header>
     <div className="container mx-auto max-w-2xl py-12">
       <Card>
         <CardHeader>
@@ -47,16 +122,8 @@ export default function OnboardingPage() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label>Search for your business</Label>
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by business name or location"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-8"
-              />
-            </div>
+            <Label>Link your gmail account to your business</Label>
+            
           </div>
 
           {filteredBusinesses.length > 0 && (
@@ -105,12 +172,17 @@ export default function OnboardingPage() {
           )}
         </CardContent>
         <CardFooter>
-          <Button onClick={handleContinue} className="w-full">
+          <Button onClick={handleContinue} className="w-full bg-green-600">
             Continue
+          </Button>
+
+          <Button onClick={handleContinue} className="w-full ml-2 bg-gray-200 text-black">
+            Skip, i would sync my email later
           </Button>
         </CardFooter>
       </Card>
     </div>
+   </>
   )
 }
 

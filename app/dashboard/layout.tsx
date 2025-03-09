@@ -44,7 +44,7 @@ export default function DashboardLayout({
   
     { href: "/dashboard/emails", icon: BarChart3, label: "Emails" },
     { href: "/dashboard/reviews", icon: Star, label: "Reviews" },
-    { href: "/dashboard/businesses", icon: BarChart3, label: "Business" },
+    { href: "/dashboard/businesses", icon: BarChart3, label: "Sync" },
     { href: "/dashboard/responses", icon: Zap, label: "Auto Responses" },
     { href: "/dashboard/analytics", icon: BarChart3, label: "Analytics" },
     { href: "/dashboard/settings", icon: Settings, label: "Settings" },

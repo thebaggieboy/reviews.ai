@@ -26,6 +26,7 @@ export default function EmailManagementPage() {
 
 
   const [emails, setEmails] = useState([]);
+  const [thread, setThread] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -74,11 +75,26 @@ export default function EmailManagementPage() {
 
     };
 
+    const fetchEmailsWithReplies = async () => {
+      // Fetch emails with GET method
+       const response = await fetch("/api/email/list", {
+         method: "GET", // <-- Explicitly specify GET
+         credentials: "include", // Include cookies
+       });
+       const data = await response.json();
+    
+       setThread(data);
+       setLoading(false);
+ 
+     };
+ 
     fetchEmails();
+    fetchEmailsWithReplies();
   }, []);
 // pages/api/gmail/emails.js
  
 console.log("Emails: ", emails);
+console.log("Thread: ", thread);
 
   return (
     <div className="flex h-[calc(100vh-4rem)] bg-gray-50">

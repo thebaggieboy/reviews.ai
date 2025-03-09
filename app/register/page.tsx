@@ -33,10 +33,11 @@ export default function RegisterPage() {
     e.preventDefault()
 
     // For demo purposes, we'll just redirect to the dashboard
-    router.push("/dashboard")
+    router.push("/onboarding")
   }
 
 	const [spinner, setSpinner] = useState(false)	
+  const [formError, setFormError] = useState(null)
 	
 	const [formData, setFormData] = useState({
 		companyName: "",
@@ -61,7 +62,7 @@ export default function RegisterPage() {
 		// Set cookies
     dispatch(setUser({companyName, email, password}))
     console.log("User[STATE]: ", {companyName, email, password})
-		router.push("/dashboard")
+		router.push("/onboarding")
 	}
 	const submit = async (e) => {
 		
@@ -101,6 +102,7 @@ export default function RegisterPage() {
 			
 		
 		} catch (error) {
+      setFormError(error)
 			
 			console.log("SIGNUP ERROR: ", error)
 		}
@@ -108,7 +110,9 @@ export default function RegisterPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-5 bg-gray-100">
+      
       <Card className="w-[350px]">
+        {formError !== null ? <p className="bg-red-200 p-2 text-center text-xs text-black">User already exists</p> : ""}
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center">Create an account</CardTitle>
           <CardDescription className="text-center">Enter your details to create your account</CardDescription>
@@ -144,7 +148,7 @@ export default function RegisterPage() {
             {/* Password strength indicator would go here */}
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button className="w-full bg-green-600" type="submit" onClick={submit} >
+            <Button className="w-full bg-green-600" onClick={submit} >
               Sign Up
             </Button>
             <div className="mt-4 text-center text-sm">

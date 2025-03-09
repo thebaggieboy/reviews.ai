@@ -104,7 +104,7 @@ export default function BusinessesPage() {
               <DialogTitle>Connect your gmail account</DialogTitle>
              
             </DialogHeader> <br />
-            <Button className="w-full" onClick={googleAuth} variant="outline">
+            <Button className="w-full bg-green-700 text-white" onClick={googleAuth} variant="outline">
                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="mr-2 h-5 w-5">
                                <path
                                  fill="#FFC107"

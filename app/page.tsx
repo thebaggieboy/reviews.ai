@@ -1,11 +1,17 @@
+"use client"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MessageSquare, Star, Zap, Clock, ThumbsUp, BarChart3, Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import styles from "../styles/main.module.css"
-
+import { selectUser, setUser } from "@/features/user/userSlice"
+import { useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
+ 
 export default function LandingPage() {
+
+  const user = useSelector(selectUser)
   return (
     <div className="flex min-h-screen flex-col" style={{fontFamily:'Inter, Sans-serif', lineHeight:1}}>
       <header className="sticky top-0 z-50 w-full p-2 border-b bg-background/95 backdrop-blur  bg-black">
@@ -29,13 +35,14 @@ export default function LandingPage() {
             </Link>
           </nav>
           <div className="ml-4 hidden md:flex gap-2">
-            <Link href="/signin">
-              <Button variant="ghost" className='bg-white text-green-800' size="sm">
-                Sign In
+          <Link href="/signin">
+              <Button variant="ghost" className='bg-white text-green-800 bold' size="sm">
+                {user !== null ? <Link className="" href={'/dashboard'}>Dashboard</Link> : <Link className="" href={'/login'}>Login</Link>}
               </Button>
             </Link>
             <Link href="/signup">
-              <Button className="bg-green-600" size="sm">Get Started</Button>
+            {user !== null ? "" :  <Button className="bg-green-600" size="sm">Get Started</Button>}
+             
             </Link>
           </div>
           <div className="ml-auto md:hidden">
@@ -64,7 +71,7 @@ export default function LandingPage() {
                       Sign In
                     </Button>
                   </Link>
-                  <Link href="/signup">
+                  <Link href="/register">
                     <Button className="w-full">Get Started</Button>
                   </Link>
                 </nav>
@@ -73,12 +80,12 @@ export default function LandingPage() {
           </div>
         </div>
       </header>
-      <main className="flex-1 ">
-        <section className="w-full py-12 md:py-24 lg:py-48  bg-green-200">
+      <main className="flex-1 bg-black">
+        <section className="w-full py-10 md:py-24 lg:py-48">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-2 text-center">
               <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-5xl/none">
+                <h1 className="text-3xl font-bold text-white tracking-tighter sm:text-4xl md:text-5xl lg:text-5xl/none">
                   AI-Powered Review Responses for Small Businesses
                 </h1>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
@@ -86,8 +93,8 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Link href="/signup">
-                  <Button size="lg" className="bg-green-600 text-white">Start Free Trial</Button>
+                <Link href="/register">
+                  <Button size="lg" className="bg-green-500 text-white">Start Free Trial</Button>
                 </Link>
                 <Link href="#demo">
                   <Button variant="outline" size="lg">
@@ -99,12 +106,12 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="problem" className="w-full py-12 md:py-24 lg:py-32 bg-green-600">
+        <section id="problem" className="w-full py-12 md:py-24 lg:py-32 bg-black">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-5xl">The Core Problem</h2>
-                <p className="mx-auto max-w-[700px] text-white md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                <p className="mx-auto max-w-[700px] text-muted md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Small businesses waste 5-10 hours/month manually responding to online reviews, risking reputation
                   damage with slow/poor responses.
                 </p>
@@ -155,14 +162,14 @@ export default function LandingPage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Our MVP Solution</h2>
-                <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                <h2 className="text-3xl text-white font-bold tracking-tighter sm:text-5xl">Our MVP Solution</h2>
+                <p className="mx-auto max-w-[700px] text-muted-foreground text-xs md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   AI-generated review responses that save time and improve customer satisfaction.
                 </p>
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
-              <Card>
+              <Card className="bg-white">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Zap className="h-5 w-5 text-emerald-500" />
@@ -175,10 +182,10 @@ export default function LandingPage() {
                   </p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="bg-white">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <MessageSquare className="h-5 w-5 text-emerald-500" />
+                    <MessageSquare className="h-5 w-5 text" />
                     Personalized Replies
                   </CardTitle>
                 </CardHeader>
@@ -188,10 +195,10 @@ export default function LandingPage() {
                   </p>
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="bg-white">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <ThumbsUp className="h-5 w-5 text-emerald-500" />
+                    <ThumbsUp className="h-5 w-5 text" />
                     One-Click Posting
                   </CardTitle>
                 </CardHeader>
@@ -217,7 +224,7 @@ export default function LandingPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-emerald-500" />
+                    <Star className="h-5 w-5 text" />
                     Smart Review Analysis
                   </CardTitle>
                 </CardHeader>
@@ -230,7 +237,7 @@ export default function LandingPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <MessageSquare className="h-5 w-5 text-emerald-500" />
+                    <MessageSquare className="h-5 w-5 text" />
                     Multiple Response Variations
                   </CardTitle>
                 </CardHeader>
@@ -274,7 +281,7 @@ export default function LandingPage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Simple, Transparent Pricing</h2>
+                <h2 className="text-3xl font-bold tracking-tighter text-white sm:text-5xl">Simple, Transparent Pricing</h2>
                 <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                   Choose the plan that's right for your business.
                 </p>
@@ -364,7 +371,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Link href="/signup">
+                <Link href="/register">
                   <Button size="lg">Start Your Free Trial</Button>
                 </Link>
                 <Link href="/contact">
@@ -377,7 +384,7 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
-      <footer className="border-t">
+      <footer className="border-t p-">
         <div className="container flex flex-col gap-4 py-10 md:flex-row md:py-12">
           <div className="flex flex-col gap-2 md:gap-4">
             <Link href="/" className="flex items-center gap-2 font-semibold">
@@ -406,7 +413,7 @@ export default function LandingPage() {
             </ul>
           </nav>
         </div>
-        <div className="border-t">
+        <div className="border-t p-5">
           <div className="container flex flex-col gap-2 py-4 md:flex-row md:items-center md:py-6">
             <p className="text-xs text-muted-foreground">
               © {new Date().getFullYear()} review.ai. All rights reserved.

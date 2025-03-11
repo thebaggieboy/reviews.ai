@@ -12,7 +12,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 const googleAuth = async() => {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-  const redirectUri = "http://localhost:3000/api/auth/callback";
+  const redirectUri = "https://reviews-gray.vercel.app/api/auth/callback";
   const scope = "openid email profile https://www.googleapis.com/auth/business.manage";
   const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${encodeURIComponent(scope)}&access_type=offline&prompt=consent`;
   console.log("Google Client ID:", clientId); 

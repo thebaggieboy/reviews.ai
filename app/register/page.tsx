@@ -72,7 +72,7 @@ export default function RegisterPage() {
 			// 	throw { password: "Passwords do not match" }
 			// }
 			setSpinner(true)
-			const url = "http://localhost:5000/api/register"
+			const url = "http://email-management-backend.onrender.com/api/register"
 			const res = await fetch(url, {
                 method: "POST",
                 headers: {

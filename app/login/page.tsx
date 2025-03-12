@@ -10,6 +10,11 @@ import Link from "next/link"
 import { Mail } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+
+import {selectUser, setUser} from "../../features/user/userSlice"
+import { useDispatch, useSelector } from "react-redux"
+
+
 const googleAuth = async() => {
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const redirectUri = "https://reviews-gray.vercel.app/api/auth/callback";
@@ -27,6 +32,7 @@ function connect(){
 export default function LoginPage() {
  
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,9 +65,10 @@ export default function LoginPage() {
 		})
 
 	}
-	function signUpSuccess() {
-		
-		router.push("dashboard?user=success")
+	function loginSuccess() {
+		    // Set cookies
+      
+		router.push("/dashboard?user=success")
 	}
 	const submit = async (e) => {
 		
@@ -86,10 +93,12 @@ export default function LoginPage() {
             const data = await res.json()
 
             if (res.status >= 200 & res.status <= 209) {
-            console.log("New User Registered.")
-            console.log(data)
+            console.log("user logged in.")
+         
+            dispatch(setUser(data))
+            console.log("User[STATE]: ", data)
             setSpinner(false)
-            signUpSuccess()
+            loginSuccess()
            
                 
             }
@@ -112,7 +121,7 @@ export default function LoginPage() {
           <CardTitle className="text-2xl text-center">Sign in</CardTitle>
           <CardDescription className="text-center">Enter your email and password to sign in</CardDescription>
         </CardHeader>
-        <form onSubmit={submit}>
+        <form>
           <CardContent className="grid gap-4">
             <Button variant="outline" onClick={googleAuth} className="w-full">
               <Mail className="mr-2 h-4 w-4" />
@@ -143,7 +152,7 @@ export default function LoginPage() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button className="w-full bg-black" type="submit">
+            <Button onClick={submit} className="w-full bg-black" type="submit">
               Sign In
             </Button>
             <div className="mt-4 text-center text-sm">

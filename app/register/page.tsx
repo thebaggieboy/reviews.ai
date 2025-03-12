@@ -28,14 +28,6 @@ export default function RegisterPage() {
   const router = useRouter()
   const dispatch = useDispatch()
 
-
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // For demo purposes, we'll just redirect to the dashboard
-    router.push("/onboarding")
-  }
-
 	const [spinner, setSpinner] = useState(false)	
   const [formError, setFormError] = useState(null)
 	
@@ -70,7 +62,7 @@ export default function RegisterPage() {
 		try {
 
 			setSpinner(true)
-			const url = "http://email-management-backend.onrender.com/api/register"
+			const url = "https://email-management-backend.onrender.com/api/register"
 			const res = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -120,7 +112,7 @@ export default function RegisterPage() {
                 name="companyName"
                 type="text"
                 placeholder="Acme Inc."
-              
+                required
                 onChange={inputChangeHandler}
               />
             </div>
@@ -131,18 +123,18 @@ export default function RegisterPage() {
                 name="email"
                 type="email"
                 placeholder="m@example.com"
-                
+                required
                 onChange={inputChangeHandler}
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input name="password" id="password" type="password"  onChange={inputChangeHandler} />
+              <Input name="password" id="password" required type="password"  onChange={inputChangeHandler} />
             </div>
             {/* Password strength indicator would go here */}
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button className="w-full bg-green-600" onClick={submit} >
+            <Button type="submit" className="w-full bg-green-600" onClick={submit} >
               Sign Up
             </Button>
             <div className="mt-4 text-center text-sm">

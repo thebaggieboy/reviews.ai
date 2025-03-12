@@ -33,6 +33,7 @@ export async function GET(req) {
     // const user = await User.findById(tokenData.userId);
     // user.googleTokens = tokens;
     const tokenData = await tokenResponse.json();
+    
 
 
     if (!tokenResponse.ok) {
@@ -40,6 +41,36 @@ export async function GET(req) {
     }
 
     console.log("🔑 Tokens Received:", tokenData);
+
+
+    const saveResponse = await fetch("https://email-management-backend.onrender.com/api/user/google-tokens", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${tokenData?.access_token}`
+      },
+      body: JSON.stringify({
+        access_token,
+        refresh_token,
+        expiry_date
+      }),
+      credentials: "include"
+    })
+    
+    if (!saveResponse.ok) {
+      const errorData = await saveResponse.json()
+      throw new Error(errorData.message || "Failed to save Google tokens")
+    }
+    
+    // Success - redirect to dashboard
+    router.push("/dashboard")
+    
+  } catch (error) {
+    console.error("Google OAuth error:", error)
+    setStatus(`Error: ${error.message}`)
+  }
+
+
 
     // Modified redirect approach
     const response = NextResponse.redirect(new URL("/dashboard", process.env.NEXT_PUBLIC_APP_URL || req.url));

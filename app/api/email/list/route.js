@@ -8,6 +8,7 @@ export async function GET() {
   try {
     // Fetch emails logic here
     const emails = await fetchEmailsFromGmail();
+    // Return Response
     return NextResponse.json(emails);
   } catch (error) {
     console.error("Error fetching emails:", error);

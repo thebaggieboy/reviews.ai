@@ -18,7 +18,11 @@ export async function GET(req) {
 
     const userData = await userResponse.json();
     console.log("👤 User Info:", userData);
+
+    
     return NextResponse.json(userData);
+
+    
 
   } catch (error) {
     console.error("❌ User Info Error:", error);

@@ -70,49 +70,46 @@ export default function LoginPage() {
       
 		router.push("/dashboard?user=success")
 	}
-	const submit = async (e) => {
-		
-		e.preventDefault();
-		try {
-			// if (password1 !== password2) {
-			// 	throw { password: "Passwords do not match" }
-			// }
-			setSpinner(true)
-			const url = "https://email-management-backend.onrender.com/api/login"
-			const res = await fetch(url, {
-                method: "POST",
-                headers: {
-
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, password}),
-                credentials: "include"
-
-            })
-            // Response should be a jwt token
-            const data = await res.json()
-
-            if (res.status >= 200 & res.status <= 209) {
-            console.log("user logged in.")
-         
-            dispatch(setUser(data))
-            console.log("User[STATE]: ", data)
-            setSpinner(false)
-            loginSuccess()
-           
-                
-            }
-			
-            const error = { ...data }
-            throw error
-
-			
-		
-		} catch (error) {
-			 
-			console.log("SIGNUP ERROR: ", error)
-		}
-	};
+  const submit = async (e) => {
+    e.preventDefault();
+    try {
+      setSpinner(true);
+      const [errorMessage, setErrorMessage] = useState(null);
+      const url = "https://email-management-backend.onrender.com/api/login";
+      
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include" // This is important for cookies to be sent and received
+      });
+          
+      const data = await res.json();
+  
+      if (res.status >= 200 && res.status <= 209) {
+        console.log("User logged in.");
+        
+        // With HTTP-only cookies, the token is automatically stored by the browser
+        // No need to manually store it in localStorage
+        
+        // Just update the Redux state with user data
+        dispatch(setUser(data.user || data));
+        console.log("User[STATE]: ", data);
+        setSpinner(false);
+        loginSuccess();
+      } else {
+        // Handle unsuccessful login
+        setSpinner(false);
+        setErrorMessage(data.message || "Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+      setSpinner(false);
+      console.log("LOGIN ERROR: ", error);
+      setErrorMessage("An error occurred during login. Please try again.");
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

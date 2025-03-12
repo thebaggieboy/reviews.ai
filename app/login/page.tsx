@@ -61,7 +61,7 @@ export default function LoginPage() {
 	}
 	function signUpSuccess() {
 		
-		router.push("/accounts/login?user=success")
+		router.push("dashboard?user=success")
 	}
 	const submit = async (e) => {
 		
@@ -71,7 +71,7 @@ export default function LoginPage() {
 			// 	throw { password: "Passwords do not match" }
 			// }
 			setSpinner(true)
-			const url = "http://localhost:5000/api/login"
+			const url = "https://email-management-backend.onrender.com/api/login"
 			const res = await fetch(url, {
                 method: "POST",
                 headers: {

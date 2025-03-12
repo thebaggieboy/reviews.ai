@@ -41,31 +41,6 @@ export async function GET(req) {
       throw new Error(tokenData.error_description || "Failed to exchange tokens");
     }
 
-    const { access_token, refresh_token, expires_in } = tokenData
-    const expiry_date = Date.now() + expires_in * 1000
-    
-    // Step 2: Save tokens to your backend
-    const token = Cookies.get('token') // Get your auth token
-    
-    const saveResponse = await fetch("https://email-management-backend.onrender.com/api/user/google-tokens", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        access_token,
-        refresh_token,
-        expiry_date
-      }),
-      credentials: "include"
-    })
-    
-    if (!saveResponse.ok) {
-      const errorData = await saveResponse.json()
-      throw new Error(errorData.message || "Failed to save Google tokens")
-    }
-    
     console.log("🔑 Tokens Received:", tokenData);
  
     

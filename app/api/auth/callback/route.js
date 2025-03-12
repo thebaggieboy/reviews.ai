@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { selectToken, setToken } from "@/features/token/tokenSlice";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie"
 
 export async function GET(req) {
   console.log("✅ API Route Hit: /api/auth/callback");
@@ -40,14 +41,17 @@ export async function GET(req) {
       throw new Error(tokenData.error_description || "Failed to exchange tokens");
     }
 
-    console.log("🔑 Tokens Received:", tokenData);
-
-
+    const { access_token, refresh_token, expires_in } = tokenData
+    const expiry_date = Date.now() + expires_in * 1000
+    
+    // Step 2: Save tokens to your backend
+    const token = Cookies.get('token') // Get your auth token
+    
     const saveResponse = await fetch("https://email-management-backend.onrender.com/api/user/google-tokens", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${tokenData?.access_token}`
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({
         access_token,
@@ -62,15 +66,9 @@ export async function GET(req) {
       throw new Error(errorData.message || "Failed to save Google tokens")
     }
     
-    // Success - redirect to dashboard
-    router.push("/dashboard")
+    console.log("🔑 Tokens Received:", tokenData);
+ 
     
-  } catch (error) {
-    console.error("Google OAuth error:", error)
-    setStatus(`Error: ${error.message}`)
-  }
-
-
 
     // Modified redirect approach
     const response = NextResponse.redirect(new URL("/dashboard", process.env.NEXT_PUBLIC_APP_URL || req.url));

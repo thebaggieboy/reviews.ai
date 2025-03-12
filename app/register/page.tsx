@@ -90,7 +90,6 @@ export default function RegisterPage() {
 		} catch (error) {
       setFormError(error)
 			
-			console.log("SIGNUP ERROR: ", error)
 		}
 	};
 

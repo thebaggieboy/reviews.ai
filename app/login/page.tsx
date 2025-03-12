@@ -42,7 +42,7 @@ export default function LoginPage() {
     router.push("/dashboard")
   }
 	const [spinner, setSpinner] = useState(false)	
-	
+  const [errorMessage, setErrorMessage] = useState(null);
 	
   	
 
@@ -74,7 +74,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       setSpinner(true);
-      const [errorMessage, setErrorMessage] = useState(null);
+   
       const url = "https://email-management-backend.onrender.com/api/login";
       
       const res = await fetch(url, {
@@ -106,8 +106,9 @@ export default function LoginPage() {
       }
     } catch (error) {
       setSpinner(false);
-      console.log("LOGIN ERROR: ", error);
+      
       setErrorMessage("An error occurred during login. Please try again.");
+      console.log("LOGIN ERROR: ", errorMessage);
     }
   };
 
